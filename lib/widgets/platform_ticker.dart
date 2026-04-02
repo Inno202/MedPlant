@@ -10,29 +10,38 @@ class PlatformTicker extends StatefulWidget {
   State<PlatformTicker> createState() => _PlatformTickerState();
 }
 
-class _PlatformTickerState extends State<PlatformTicker>
-    with SingleTickerProviderStateMixin {
+class _PlatformTickerState extends State<PlatformTicker> {
   late final ScrollController _scrollController;
-  late final double _scrollWidth;
-  late final double _screenWidth;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startScrolling();
-    });
+
+    // Delay scrolling until first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) => _startScrolling());
   }
 
   void _startScrolling() async {
-    while (_scrollController.hasClients) {
-      await _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(seconds: 30),
-        curve: Curves.linear,
-      );
-      _scrollController.jumpTo(0);
+    // Ensure the controller is attached
+    if (!_scrollController.hasClients) return;
+
+    // Get scrollable width
+    final maxExtent = _scrollController.position.maxScrollExtent;
+
+    if (maxExtent == 0) return; // Nothing to scroll
+
+    while (mounted) {
+      if (_scrollController.hasClients) {
+        await _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(seconds: 30),
+          curve: Curves.linear,
+        );
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(0);
+        }
+      }
     }
   }
 
@@ -43,11 +52,31 @@ class _PlatformTickerState extends State<PlatformTicker>
   }
 
   final List<_TickerItem> items = const [
-    _TickerItem(label: "Taveta Retail Market", price: "KES 50", change: "0%", changeType: ChangeType.neutral),
-    _TickerItem(label: "🌿 Kale Khayega", price: "KES 70", change: "-13%", changeType: ChangeType.down),
-    _TickerItem(label: "🌿 Spinach Wundanyi", price: "KES 80", change: "0%", changeType: ChangeType.neutral),
-    _TickerItem(label: "🥬 Spinach Kitale", price: "KES 30", change: "-33%", changeType: ChangeType.down),
-    _TickerItem(label: "Makutano Embu", price: "KES 45", change: "0%", changeType: ChangeType.neutral),
+    _TickerItem(
+        label: "Taveta Retail Market",
+        price: "KES 50",
+        change: "0%",
+        changeType: ChangeType.neutral),
+    _TickerItem(
+        label: "🌿 Kale Khayega",
+        price: "KES 70",
+        change: "-13%",
+        changeType: ChangeType.down),
+    _TickerItem(
+        label: "🌿 Spinach Wundanyi",
+        price: "KES 80",
+        change: "0%",
+        changeType: ChangeType.neutral),
+    _TickerItem(
+        label: "🥬 Spinach Kitale",
+        price: "KES 30",
+        change: "-33%",
+        changeType: ChangeType.down),
+    _TickerItem(
+        label: "Makutano Embu",
+        price: "KES 45",
+        change: "0%",
+        changeType: ChangeType.neutral),
   ];
 
   @override
@@ -89,9 +118,8 @@ class _PlatformTickerState extends State<PlatformTicker>
               physics: const NeverScrollableScrollPhysics(),
               child: Row(
                 children: [
-                  ...items.map((item) => _TickerItemWidget(item: item)).toList(),
-                  // Duplicate for seamless scroll
-                  ...items.map((item) => _TickerItemWidget(item: item)).toList(),
+                  ...items.map((item) => _TickerItemWidget(item: item)),
+                  ...items.map((item) => _TickerItemWidget(item: item)),
                 ],
               ),
             ),

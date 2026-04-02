@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'core/app_router.dart';
+import 'providers/navigation_provider.dart'; // Make sure this file exists
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigationProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +25,7 @@ class MyApp extends StatelessWidget {
       title: 'MedPlant',
       debugShowCheckedModeBanner: false,
 
-      // ✅ THIS is correct for GoRouter
+      // ✅ Correct GoRouter usage
       routerConfig: AppRouter.router,
 
       theme: ThemeData(
