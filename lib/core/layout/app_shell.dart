@@ -17,7 +17,7 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
+    final location = GoRouterState.of(context).matchedLocation;
     final currentIndex = _getIndex(location);
 
     return Scaffold(
@@ -76,10 +76,10 @@ class AppShell extends StatelessWidget {
 
     return GestureDetector(
   onTap: () {
-  final location = GoRouterState.of(context).uri.toString();
+  final location = GoRouterState.of(context).matchedLocation;
 
   if (!location.startsWith(route)) {
-    context.push(route);
+    context.go(route);
   }
 },
       child: AnimatedContainer(
@@ -115,7 +115,7 @@ class AppShell extends StatelessWidget {
 
   // 🔥 DRAWER
   Widget _buildDrawer(BuildContext context) {
-  final location = GoRouterState.of(context).uri.toString();
+  final location = GoRouterState.of(context).matchedLocation;
 
   Widget navItem(String title, IconData icon, String route) {
     final isActive = location.startsWith(route);
@@ -132,10 +132,10 @@ class AppShell extends StatelessWidget {
         ),
       ),
     onTap: () {
-  final location = GoRouterState.of(context).uri.toString();
+  final location = GoRouterState.of(context).matchedLocation;
 
   if (!location.startsWith(route)) {
-    context.push(route);
+    context.go(route);
   }
 
   Navigator.pop(context);
@@ -165,7 +165,7 @@ class AppShell extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                "John Doe",
+                "Themba Mthembu",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -206,7 +206,7 @@ class AppShell extends StatelessWidget {
 
   Future.microtask(() {
     if (context.mounted) {
-      context.push('/login');
+      context.go('/login');
     }
   });
 },
