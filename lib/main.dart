@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'core/app_router.dart';
 import 'providers/navigation_provider.dart'; // Make sure this file exists
-
+import 'providers/user_provider.dart';
 void main() {
   runApp(
     MultiProvider(
