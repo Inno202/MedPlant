@@ -29,9 +29,12 @@ class AppRouter {
 
       // 🌐 MAIN APP (WITH NAV BAR + DRAWER)
       ShellRoute(
-        builder: (context, state, child) {
-          return AppShell(child: child);
-        },
+  builder: (context, state, child) {
+    return AppShell(
+      child: child,
+      location: state.matchedLocation,
+    );
+  },
         routes: [
 
           GoRoute(

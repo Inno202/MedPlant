@@ -4,8 +4,9 @@ import 'package:medplant/constants/app_colors.dart';
 
 class AppShell extends StatelessWidget {
   final Widget child;
+  final String location;
 
-  const AppShell({super.key, required this.child});
+  const AppShell({super.key, required this.child, required this.location});
 
   int _getIndex(String location) {
     if (location.startsWith('/home')) return 0;
@@ -17,7 +18,6 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final location = GoRouterState.of(context).matchedLocation;
     final currentIndex = _getIndex(location);
 
     return Scaffold(
@@ -25,11 +25,8 @@ class AppShell extends StatelessWidget {
         backgroundColor: AppColors.primaryDark,
         title: const Text("MedPlants", style: TextStyle(color: Colors.white)),
       ),
-
       drawer: _buildDrawer(context),
-
       body: child,
-
       bottomNavigationBar: _premiumNav(context, currentIndex),
     );
   }
@@ -75,20 +72,16 @@ class AppShell extends StatelessWidget {
     final isActive = i == currentIndex;
 
     return GestureDetector(
-  onTap: () {
-  final location = GoRouterState.of(context).matchedLocation;
-
-  if (!location.startsWith(route)) {
-    context.go(route);
-  }
-},
+      onTap: () {
+        if (!location.startsWith(route)) {
+          context.go(route);
+        }
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isActive
-              ? AppColors.primary.withOpacity(0.1)
-              : Colors.transparent,
+          color: isActive ? AppColors.primary.withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -105,7 +98,7 @@ class AppShell extends StatelessWidget {
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
-              )
+              ),
             ]
           ],
         ),
@@ -115,106 +108,99 @@ class AppShell extends StatelessWidget {
 
   // 🔥 DRAWER
   Widget _buildDrawer(BuildContext context) {
-  final location = GoRouterState.of(context).matchedLocation;
+    Widget navItem(String title, IconData icon, String route) {
+      final isActive = location.startsWith(route);
 
-  Widget navItem(String title, IconData icon, String route) {
-    final isActive = location.startsWith(route);
-
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isActive ? AppColors.primary : Colors.grey,
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isActive ? AppColors.primary : Colors.black87,
+      return ListTile(
+        leading: Icon(
+          icon,
+          color: isActive ? AppColors.primary : Colors.grey,
         ),
-      ),
-    onTap: () {
-  final location = GoRouterState.of(context).matchedLocation;
+        title: Text(
+          title,
+          style: TextStyle(
+            color: isActive ? AppColors.primary : Colors.black87,
+          ),
+        ),
+        onTap: () {
+          if (!location.startsWith(route)) {
+            context.go(route);
+          }
+          Navigator.pop(context);
+        },
+      );
+    }
 
-  if (!location.startsWith(route)) {
-    context.go(route);
-  }
-
-  Navigator.pop(context);
-},
-    );
-  }
-
-  return Drawer(
-    child: Column(
-      children: [
-
-        // 🔥 PREMIUM HEADER
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(top: 50, bottom: 20),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.primaryDark, AppColors.primary],
+    return Drawer(
+      child: Column(
+        children: [
+          // 🔥 PREMIUM HEADER
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(top: 50, bottom: 20),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [AppColors.primaryDark, AppColors.primary],
+              ),
+            ),
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 32,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 35, color: AppColors.primary),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Themba Mthembu",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Observer",
+                  style: TextStyle(color: Colors.white70),
+                ),
+              ],
             ),
           ),
-          child: Column(
-            children: const [
-              CircleAvatar(
-                radius: 32,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 35, color: AppColors.primary),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Themba Mthembu",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                "Observer",
-                style: TextStyle(color: Colors.white70),
-              ),
-            ],
+
+          const SizedBox(height: 10),
+
+          // 🔥 NAV ITEMS
+          navItem("Home", Icons.home, "/home"),
+          navItem("Reports", Icons.description, "/viewreports"),
+          navItem("Predictions", Icons.auto_awesome, "/predictions"),
+          navItem("Profile", Icons.person, "/profile"),
+
+          const Spacer(),
+
+          // 🔥 DIVIDER
+          const Divider(),
+
+          // 🔥 LOGOUT
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.red),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Future.microtask(() {
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              });
+            },
           ),
-        ),
 
-        const SizedBox(height: 10),
-
-        // 🔥 NAV ITEMS
-        navItem("Home", Icons.home, "/home"),
-        navItem("Reports", Icons.description, "/viewreports"),
-        navItem("Predictions", Icons.auto_awesome, "/predictions"),
-        navItem("Profile", Icons.person, "/profile"),
-
-        const Spacer(),
-
-        // 🔥 DIVIDER
-        const Divider(),
-
-        // 🔥 LOGOUT
-        ListTile(
-          leading: const Icon(Icons.logout, color: Colors.red),
-          title: const Text(
-            "Logout",
-            style: TextStyle(color: Colors.red),
-          ),
-          onTap: () {
-  Navigator.pop(context);
-
-  Future.microtask(() {
-    if (context.mounted) {
-      context.go('/login');
-    }
-  });
-},
-        ),
-
-        const SizedBox(height: 10),
-      ],
-    ),
-  );
-}
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
 }
