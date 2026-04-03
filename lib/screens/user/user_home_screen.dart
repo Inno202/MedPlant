@@ -12,6 +12,8 @@ import 'package:medplant/widgets/plant_grid.dart';
 import 'package:medplant/widgets/platform_ticker.dart';
 import 'package:medplant/widgets/section_header.dart';
 import 'package:medplant/models/plant_model.dart';
+import 'package:provider/provider.dart';
+import 'package:medplant/providers/user_provider.dart';
 
 class UserHomeScreen extends StatelessWidget {
   const UserHomeScreen({super.key});
@@ -19,7 +21,8 @@ class UserHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
+final userProvider = Provider.of<UserProvider>(context);
+final isLoggedIn = userProvider.role != null;
     // Responsive logic for grid columns
     int capabilityColumns = 1;
     int plantColumns = 1;
@@ -81,7 +84,7 @@ class UserHomeScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const InfoGrid(),
               const SizedBox(height: 16),
-              const AuthCTASection(),
+              if (!isLoggedIn) const AuthCTASection(),
               const SizedBox(height: 16),
               const BadgeRow(),
               const SizedBox(height: 24),
