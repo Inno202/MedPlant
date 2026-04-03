@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medplant/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'package:medplant/providers/navigation_provider.dart';
@@ -88,62 +89,99 @@ class AppShell extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawer(BuildContext context, NavigationProvider navProvider) {
-    Widget navItem(String title, IconData icon, int index) {
-      final isActive = navProvider.currentIndex == index;
-      return ListTile(
-        leading: Icon(icon, color: isActive ? AppColors.primary : Colors.grey),
-        title: Text(title, style: TextStyle(color: isActive ? AppColors.primary : Colors.black87)),
-        onTap: () {
-          navProvider.setIndex(index);
-          context.go(navProvider.routes[index]);
-          Navigator.pop(context);
-        },
-      );
-    }
+Widget _buildDrawer(BuildContext context, NavigationProvider navProvider) {
+  final userProvider = Provider.of<UserProvider>(context);
+  final role = userProvider.role;
 
-    return Drawer(
-      child: Column(
-        children: [
+  Widget navItem(String title, IconData icon, int index) {
+    final isActive = navProvider.currentIndex == index;
+    return ListTile(
+      leading: Icon(icon, color: isActive ? AppColors.primary : Colors.grey),
+      title: Text(title,
+          style: TextStyle(color: isActive ? AppColors.primary : Colors.black87)),
+      onTap: () {
+        navProvider.setIndex(index);
+        context.go(navProvider.routes[index]);
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  // Determine bottom button text and action
+  String bottomButtonText = role == null ? "Login" : "Logout";
+  VoidCallback bottomButtonAction = () {
+    Navigator.pop(context);
+    if (role == null) {
+      context.go('/login');
+    } else {
+      // log out
+      userProvider.setRole(null); // Reset role
+      context.go('/login');
+    }
+  };
+
+  return Drawer(
+    child: Column(
+      children: [
+        // Show user info only if logged in
+        if (role != null)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.only(top: 50, bottom: 20),
             decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [AppColors.primaryDark, AppColors.primary]),
+              gradient: LinearGradient(
+                  colors: [AppColors.primaryDark, AppColors.primary]),
             ),
             child: Column(
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 32,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.person, size: 35, color: AppColors.primary),
                 ),
-                SizedBox(height: 10),
-                Text("Themba Mthembu",
-                    style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 4),
-                Text("Observer", style: TextStyle(color: Colors.white70)),
+                const SizedBox(height: 10),
+                Text(
+                  "Themba Mthembu",
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  role.name == "observer"
+                      ? "Observer"
+                      : role.name == "fieldManager"
+                          ? "Field Manager"
+                          : role.name == "admin"
+                              ? "Admin"
+                              : "Unknown Role",
+                  style: const TextStyle(color: Colors.white70),
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
-          navItem("Home", Icons.home, 0),
-          navItem("Reports", Icons.description, 1),
-          navItem("Predictions", Icons.auto_awesome, 2),
-          navItem("Profile", Icons.person, 3),
-          const Spacer(),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text("Logout", style: TextStyle(color: Colors.red)),
-            onTap: () {
-              Navigator.pop(context);
-              Future.microtask(() => context.go('/login'));
-            },
+        const SizedBox(height: 10),
+        navItem("Home", Icons.home, 0),
+        navItem("Reports", Icons.description, 1),
+        navItem("Predictions", Icons.auto_awesome, 2),
+        navItem("Profile", Icons.person, 3),
+        const Spacer(),
+        const Divider(),
+        ListTile(
+          leading: Icon(
+              role == null ? Icons.login : Icons.logout,
+              color: role == null ? AppColors.primary : Colors.red),
+          title: Text(
+            bottomButtonText,
+            style: TextStyle(
+                color: role == null ? AppColors.primary : Colors.red),
           ),
-          const SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
+          onTap: bottomButtonAction,
+        ),
+        const SizedBox(height: 10),
+      ],
+    ),
+  );
+}
 }

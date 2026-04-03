@@ -38,4 +38,9 @@ class UserProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+    void setRole(UserRole? newRole) {
+    _role = newRole;
+    notifyListeners();
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medplant/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:medplant/core/layout/app_shell.dart';
 import 'package:medplant/models/plant_model.dart';
@@ -52,7 +53,7 @@ class AppRouter {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const Placeholder(),
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),
