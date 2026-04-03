@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
 import '/constants/app_colors.dart';
 import '/widgets/custom_text_field.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/outlined_button.dart';
+import '/providers/user_provider.dart';
+import '/models/user_role.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -14,20 +18,29 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  void handleLogin(BuildContext context) {
-    final username = usernameController.text;
-    final password = passwordController.text;
+void handleLogin(BuildContext context) {
+  final username = usernameController.text.trim();
+  final password = passwordController.text.trim();
 
-    if (username == 'demo' && password == 'demo123') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login successful! Redirecting...')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid username or password')),
-      );
-    }
+  final userProvider = context.read<UserProvider>();
+
+  if (username == 'observer' && password == '1234') {
+    userProvider.login(UserRole.observer);
+  } else if (username == 'manager' && password == '1234') {
+    userProvider.login(UserRole.fieldManager);
+  } else if (username == 'admin' && password == '1234') {
+    userProvider.login(UserRole.admin);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Invalid username or password')),
+    );
+    return;
   }
+
+  debugPrint("Login successful → ${userProvider.role}");
+
+  context.go('/home');
+}
 
   @override
   Widget build(BuildContext context) {
@@ -82,9 +95,9 @@ class LoginScreen extends StatelessWidget {
                       Text(
                         '... sign in to continue ...',
                         style: GoogleFonts.dancingScript(
-                  color: AppColors.primarySoft,
-                  fontSize: 18,
-                ),
+                          color: AppColors.primarySoft,
+                          fontSize: 18,
+                        ),
                       ),
                     ],
                   ),
@@ -109,48 +122,29 @@ class LoginScreen extends StatelessWidget {
                         controller: passwordController,
                       ),
                       const SizedBox(height: 24),
-                      PrimaryButton(
-                        text: 'Login',
-                        icon: Icons.login,
-                        onPressed: () async {
-  // simulate login
-  await Future.delayed(const Duration(milliseconds: 300));
 
-  if (context.mounted) {
-    context.go('/home');
-  }
-}
-                      ),
+                      // 🔥 LOGIN BUTTON
+                      PrimaryButton(
+  text: 'Login',
+  icon: Icons.login,
+  onPressed: () {
+    debugPrint("LOGIN BUTTON CLICKED");
+    handleLogin(context);
+  },
+),
+
                       const SizedBox(height: 12),
+
                       OutlinedButtonWidget(
                         text: 'Create New Account',
                         icon: Icons.person_add,
                         onPressed: () {
-                          
                           context.push('/register');
-                        
                         },
                       ),
-                      // const SizedBox(height: 16),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Text('Don\'t have an account? ', style: TextStyle(color: AppColors.textSecondary)),
-                      //     GestureDetector(
-                      //       onTap: () {
-                      //         ScaffoldMessenger.of(context).showSnackBar(
-                      //           const SnackBar(content: Text('Redirecting to Registration')),
-                                
-                      //         );  context.go('/register');
-                      //       },
-                      //       child: Text(
-                      //         'Register here',
-                      //         style: TextStyle(color: AppColors.primaryDark, fontWeight: FontWeight.bold),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+
                       const SizedBox(height: 8),
+
                       GestureDetector(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -161,6 +155,15 @@ class LoginScreen extends StatelessWidget {
                           'Forgot Password?',
                           style: TextStyle(color: AppColors.primaryDark, fontSize: 14),
                         ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // 🔥 DEMO CREDENTIALS DISPLAY
+                      Text(
+                        'Demo Accounts:\nObserver: observer / 1234\nManager: manager / 1234\nAdmin: admin / 1234',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),

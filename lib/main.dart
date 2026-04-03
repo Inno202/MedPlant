@@ -3,13 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'core/app_router.dart';
-import 'providers/navigation_provider.dart'; // Make sure this file exists
+import 'providers/navigation_provider.dart';
 import 'providers/user_provider.dart';
+
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()), // ✅ ADD THIS
       ],
       child: const MyApp(),
     ),
@@ -24,8 +26,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'MedPlant',
       debugShowCheckedModeBanner: false,
-
-      // ✅ Correct GoRouter usage
       routerConfig: AppRouter.router,
 
       theme: ThemeData(

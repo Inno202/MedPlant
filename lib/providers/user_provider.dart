@@ -2,14 +2,40 @@ import 'package:flutter/material.dart';
 import '../models/user_role.dart';
 
 class UserProvider extends ChangeNotifier {
-  // Start with a default role for testing
-  UserRole _role = UserRole.observer;
+  UserRole? _role; // null = not logged in
+  bool _isLoggedIn = false;
 
-  UserRole get role => _role;
+  UserRole? get role => _role;
+  bool get isLoggedIn => _isLoggedIn;
 
-  // Call this to switch roles during testing
-  void setRole(UserRole newRole) {
+  // 🔐 LOGIN
+  void login(UserRole role) {
+    _role = role;
+    _isLoggedIn = true;
+
+    debugPrint("User logged in as: ${role.name}");
+
+    notifyListeners();
+  }
+
+  // 🔓 LOGOUT
+  void logout() {
+    debugPrint("User logged out");
+
+    _role = null;
+    _isLoggedIn = false;
+
+    notifyListeners();
+  }
+
+  // 🔄 TEMP: switch role while logged in (for testing)
+  void switchRole(UserRole newRole) {
+    if (!_isLoggedIn) return;
+
     _role = newRole;
+
+    debugPrint("Role switched to: ${newRole.name}");
+
     notifyListeners();
   }
 }
