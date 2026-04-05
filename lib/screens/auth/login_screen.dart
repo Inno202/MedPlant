@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:medplant/providers/navigation_provider.dart';
 import 'package:provider/provider.dart';
 
 import '/constants/app_colors.dart';
@@ -23,6 +24,7 @@ void handleLogin(BuildContext context) {
   final password = passwordController.text.trim();
 
   final userProvider = context.read<UserProvider>();
+  final navProvider = context.read<NavigationProvider>();
 
   if (username == 'observer' && password == '1234') {
     userProvider.login(UserRole.observer);
@@ -37,9 +39,18 @@ void handleLogin(BuildContext context) {
     return;
   }
 
-  debugPrint("Login successful → ${userProvider.role}");
+  // 🔥 Force navigation config BEFORE routing
+  navProvider.configureRoutes(userProvider.role);
 
-  context.go('/home');
+  debugPrint("ROLE: ${userProvider.role}");
+  debugPrint("ROUTES: ${navProvider.routes}");
+
+  // ✅ Route based on role
+  if (userProvider.role == UserRole.admin) {
+    context.go('/admin/dashboard');
+  } else {
+    context.go('/home');
+  }
 }
 
   @override

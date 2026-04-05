@@ -28,34 +28,50 @@ class AppShell extends StatelessWidget {
     );
   }
 
-  Widget _premiumNav(BuildContext context, NavigationProvider navProvider) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Container(
-        height: 70,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(40),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _navItem(context, Icons.home, "Home", 0, navProvider),
-            _navItem(context, Icons.description, "Reports", 1, navProvider),
-            _navItem(context, Icons.auto_awesome, "Predictions", 2, navProvider),
-            _navItem(context, Icons.person, "Profile", 3, navProvider),
-          ],
-        ),
+Widget _premiumNav(BuildContext context, NavigationProvider navProvider) {
+  final labels = navProvider.routes.map((route) {
+    if (route.contains('dashboard')) return "Dashboard";
+    if (route.contains('users')) return "Users";
+    if (route.contains('system')) return "System";
+    if (route.contains('home')) return "Home";
+    if (route.contains('viewreports')) return "Reports";
+    if (route.contains('predictions')) return "Predictions";
+    return "Profile";
+  }).toList();
+
+  final icons = navProvider.routes.map((route) {
+    if (route.contains('dashboard')) return Icons.dashboard;
+    if (route.contains('users')) return Icons.people;
+    if (route.contains('system')) return Icons.settings;
+    if (route.contains('home')) return Icons.home;
+    if (route.contains('viewreports')) return Icons.description;
+    if (route.contains('predictions')) return Icons.auto_awesome;
+    return Icons.person;
+  }).toList();
+
+  return Padding(
+    padding: const EdgeInsets.all(16),
+    child: Container(
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(40),
       ),
-    );
-  }
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: List.generate(navProvider.routes.length, (index) {
+          return _navItem(
+            context,
+            icons[index],
+            labels[index],
+            index,
+            navProvider,
+          );
+        }),
+      ),
+    ),
+  );
+}
 
   Widget _navItem(
       BuildContext context, IconData icon, String label, int index, NavigationProvider navProvider) {

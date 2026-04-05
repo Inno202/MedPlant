@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
+import '../models/user_role.dart';
 
 class NavigationProvider extends ChangeNotifier {
   int _currentIndex = 0;
 
-  final List<String> routes = [
-    '/home',
-    '/viewreports',
-    '/predictions',
-    '/profile',
-  ];
-
   int get currentIndex => _currentIndex;
-  String get currentRoute => routes[_currentIndex];
+
+  List<String> _routes = [];
+
+  List<String> get routes => _routes;
+
+  void configureRoutes(UserRole? role) {
+    if (role == UserRole.admin) {
+      _routes = [
+        '/admin/dashboard',
+        '/admin/users',
+        '/admin/system',
+        '/profile',
+      ];
+    } else {
+      // default (observer + field manager + guest)
+      _routes = [
+        '/home',
+        '/viewreports',
+        '/predictions',
+        '/profile',
+      ];
+    }
+
+    _currentIndex = 0;
+    notifyListeners();
+  }
 
   void setIndex(int index) {
     if (_currentIndex != index) {
@@ -21,10 +40,10 @@ class NavigationProvider extends ChangeNotifier {
   }
 
   void setRoute(String route) {
-  final index = routes.indexWhere((r) => route.startsWith(r));
-  if (index != -1 && index != _currentIndex) { // only notify if different
-    _currentIndex = index;
-    notifyListeners(); // this only triggers rebuild when needed
+    final index = _routes.indexWhere((r) => route.startsWith(r));
+    if (index != -1 && index != _currentIndex) {
+      _currentIndex = index;
+      notifyListeners();
+    }
   }
-}
 }

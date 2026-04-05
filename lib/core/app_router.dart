@@ -13,6 +13,7 @@ import 'package:medplant/screens/user/predictions_screen.dart';
 import 'package:medplant/screens/user/plant_detail_screen.dart';
 import 'package:medplant/screens/user/add_report_screen.dart';
 import 'package:medplant/screens/field_manager/approve_reports_screen.dart';
+import 'package:medplant/screens/admin/admin_dashboard.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -31,32 +32,46 @@ class AppRouter {
 
       // 🌐 MAIN APP (WITH NAV BAR + DRAWER)
       ShellRoute(
-        builder: (context, state, child) {
-          // update provider index from current location
-          final navProvider = Provider.of<NavigationProvider>(context);
-          navProvider.setRoute(state.matchedLocation);
+  builder: (context, state, child) {
+    final navProvider = Provider.of<NavigationProvider>(context);
+    navProvider.setRoute(state.matchedLocation);
+    return AppShell(child: child);
+  },
+  routes: [
+    // USER ROUTES
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => UserHomeScreen(),
+    ),
+    GoRoute(
+      path: '/viewreports',
+      builder: (context, state) => const ViewReportsScreen(),
+    ),
+    GoRoute(
+      path: '/predictions',
+      builder: (context, state) => const PredictionsScreen(),
+    ),
 
-          return AppShell(child: child);
-        },
-        routes: [
-          GoRoute(
-            path: '/home',
-            builder: (context, state) => UserHomeScreen(),
-          ),
-          GoRoute(
-            path: '/viewreports',
-            builder: (context, state) => const ViewReportsScreen(),
-          ),
-          GoRoute(
-            path: '/predictions',
-            builder: (context, state) => const PredictionsScreen(),
-          ),
-          GoRoute(
-            path: '/profile',
-            builder: (context, state) => const ProfileScreen(),
-          ),
-        ],
-      ),
+    // 🔥 ADMIN ROUTES (ADD THESE)
+    GoRoute(
+      path: '/admin/dashboard',
+      builder: (context, state) =>  AdminDashboardScreen(),
+    ),
+    GoRoute(
+      path: '/admin/users',
+      builder: (context, state) => const Placeholder(),
+    ),
+    GoRoute(
+      path: '/admin/system',
+      builder: (context, state) => const Placeholder(),
+    ),
+
+    GoRoute(
+      path: '/profile',
+      builder: (context, state) => const ProfileScreen(),
+    ),
+  ],
+),
 
       // 🔥 STACK SCREENS OUTSIDE SHELL
       GoRoute(

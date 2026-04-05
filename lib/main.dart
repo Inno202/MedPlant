@@ -7,6 +7,7 @@ import 'providers/navigation_provider.dart';
 import 'providers/user_provider.dart';
 
 void main() {
+  
   runApp(
     MultiProvider(
       providers: [
@@ -23,6 +24,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final userProvider = Provider.of<UserProvider>(context);
+    final navProvider = Provider.of<NavigationProvider>(context);
+
+    // 🔥 Sync role → navigation
+    navProvider.configureRoutes(userProvider.role);
+    
     return MaterialApp.router(
       title: 'MedPlant',
       debugShowCheckedModeBanner: false,
