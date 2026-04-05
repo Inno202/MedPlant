@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:medplant/screens/about_us.dart';
+import 'package:medplant/screens/admin_contact_message_screen.dart';
+import 'package:medplant/screens/contact_us.dart';
 import 'package:medplant/screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:medplant/core/layout/app_shell.dart';
@@ -89,6 +92,18 @@ class AppRouter {
         path: '/approvereports',
         builder: (context, state) => const ApproveReportsScreen(),
       ),
+      GoRoute(
+      path: '/about',
+      builder: (context, state) => const AboutScreen(),
+    ),GoRoute(
+      path: '/contactmessages',
+      builder: (context, state) =>  AdminContactMessagesScreen(messages: [],),
+    ),
+    GoRoute(
+      path: '/contact',
+      builder: (context, state) =>  ContactScreen(),
+    ),
+    
     ],
   );
 }

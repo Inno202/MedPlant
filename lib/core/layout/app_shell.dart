@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medplant/providers/user_provider.dart';
+import 'package:medplant/widgets/drawer_nav_item.dart';
 import 'package:provider/provider.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'package:medplant/providers/navigation_provider.dart';
@@ -182,7 +183,19 @@ Widget _buildDrawer(BuildContext context, NavigationProvider navProvider) {
         navItem("Reports", Icons.description, 1),
         navItem("Predictions", Icons.auto_awesome, 2),
         navItem("Profile", Icons.person, 3),
-        const Spacer(),
+        DrawerNavItem(title: "About Us", icon: Icons.info, route: "/about"),
+if (role?.name == "admin")
+  const DrawerNavItem(
+    title: "Contact Messages",
+    icon: Icons.message,
+    route: "/contactmessages",
+  )
+else
+  const DrawerNavItem(
+    title: "Contact Us",
+    icon: Icons.contact_mail,
+    route: "/contact",
+  ),        const Spacer(),
         const Divider(),
         ListTile(
           leading: Icon(

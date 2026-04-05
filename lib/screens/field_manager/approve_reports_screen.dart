@@ -60,13 +60,7 @@ class _ApproveReportsScreenState extends State<ApproveReportsScreen> {
     }
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text(
-      //     "Approve Reports",
-      //     style: TextStyle(color: Colors.white),
-      //   ),
-      //   backgroundColor: AppColors.primaryDark,
-      // ),
+    
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -59,7 +59,6 @@ PredictionModel(
 ];
 
     return Scaffold(
-    //  appBar: AppBar(title: const Text("Predictions", style: TextStyle(color: AppColors.white)), backgroundColor: AppColors.primaryDark,),
     body: Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   children: [

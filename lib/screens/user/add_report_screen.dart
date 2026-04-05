@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medplant/constants/app_colors.dart';
 import 'package:medplant/widgets/results_display_plant_identification.dart';
@@ -171,7 +172,7 @@ double? confidence;
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                                context.go("/viewreports");
                               },
                               icon: const Icon(Icons.close, color: AppColors.primaryDark,),
                               label:  Text("Cancel",   style: GoogleFonts.lato(color: AppColors.primaryDark),),
