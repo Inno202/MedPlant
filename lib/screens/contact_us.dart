@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:medplant/widgets/section_header.dart';
 import '../constants/app_colors.dart';
 import '../models/contact_us_model.dart';
 
@@ -88,30 +90,31 @@ class _ContactScreenState extends State<ContactScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contact ITIKI Africa'),
-        backgroundColor: AppColors.primaryDark,
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Contact ITIKI Africa'),
+      //   backgroundColor: AppColors.primaryDark,
+      //   centerTitle: true,
+      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // header
-            Row(
-              children: const [
-                Icon(FontAwesomeIcons.envelope, color: AppColors.primarySoft),
-                SizedBox(width: 8),
-                Text(
-                  'Contact ITIKI Africa',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primaryDark),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: const [
+            //     Icon(FontAwesomeIcons.envelope, color: AppColors.primarySoft),
+            //     SizedBox(width: 8),
+            //     Text(
+            //       'Contact ITIKI Africa',
+            //       style: TextStyle(
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.w700,
+            //           color: AppColors.primaryDark),
+            //     ),
+            //   ],
+            // ),
+            SectionHeader(title: "Contact Us"),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(24),
@@ -125,24 +128,23 @@ class _ContactScreenState extends State<ContactScreen> {
                 children: [
                   // Title & intro
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Icon(FontAwesomeIcons.paperPlane,
-                          color: AppColors.primarySoft, size: 28),
+                          color: AppColors.primarySoft, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(contact.title,
-                                style: const TextStyle(
+                                style: GoogleFonts.montserrat(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w800,
                                     color: AppColors.primaryDark)),
                             Text(contact.subtitle,
-                                style: const TextStyle(
+                                style: GoogleFonts.dancingScript(
                                     fontSize: 16,
-                                    fontStyle: FontStyle.italic,
                                     color: AppColors.primary)),
                           ],
                         ),
@@ -209,15 +211,15 @@ class _ContactScreenState extends State<ContactScreen> {
                           maxLines: 6,
                           decoration: const InputDecoration(
                               hintText:
-                                  'Your message (minimum 20 characters, no links)',
+                                  'Your message (minimum 200 characters, no links)',
                               filled: true,
                               fillColor: Color(0xFFFAFDFB),
                               border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(12)),
                               )),
-                          validator: (value) => value!.length < 20
-                              ? 'Message must be at least 20 characters'
+                          validator: (value) => value!.length < 200
+                              ? 'Message must be at least 200 characters'
                               : null,
                         ),
                         const SizedBox(height: 16),
@@ -227,8 +229,8 @@ class _ContactScreenState extends State<ContactScreen> {
                             ElevatedButton.icon(
                                 onPressed: _submitForm,
                                 icon:
-                                    const FaIcon(FontAwesomeIcons.paperPlane),
-                                label: const Text('Send message'),
+                                    const FaIcon(FontAwesomeIcons.paperPlane, color: AppColors.white),
+                                label:  Text('Send message', style: GoogleFonts.lato(color: AppColors.white)),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primaryDark,
                                   shape: RoundedRectangleBorder(
@@ -245,8 +247,8 @@ class _ContactScreenState extends State<ContactScreen> {
                                 subjectController.clear();
                                 messageController.clear();
                               },
-                              icon: const FaIcon(FontAwesomeIcons.times),
-                              label: const Text('Cancel'),
+                              icon: const FaIcon(FontAwesomeIcons.times,  color: AppColors.primaryDark),
+                              label:  Text('Cancel', style: GoogleFonts.lato(color: AppColors.primaryDark) ,),
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(
                                     color: AppColors.primaryDark, width: 2),

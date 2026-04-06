@@ -110,19 +110,23 @@ Widget _buildDrawer(BuildContext context, NavigationProvider navProvider) {
   final userProvider = Provider.of<UserProvider>(context);
   final role = userProvider.role;
 
-  Widget navItem(String title, IconData icon, int index) {
-    final isActive = navProvider.currentIndex == index;
-    return ListTile(
-      leading: Icon(icon, color: isActive ? AppColors.primary : Colors.grey),
-      title: Text(title,
-          style: TextStyle(color: isActive ? AppColors.primary : Colors.black87)),
-      onTap: () {
-        navProvider.setIndex(index);
-        context.go(navProvider.routes[index]);
-        Navigator.pop(context);
-      },
-    );
-  }
+  Widget navItem(String title, IconData icon, String route) {
+    final isActive = GoRouterState.of(context).uri.path == route;
+
+  return ListTile(
+    leading: Icon(icon, color: isActive ? AppColors.primary : Colors.grey),
+    title: Text(
+      title,
+      style: TextStyle(
+        color: isActive ? AppColors.primary : Colors.black87,
+      ),
+    ),
+    onTap: () {
+      Navigator.pop(context);
+      context.go(route);
+    },
+  );
+}
 
   // Determine bottom button text and action
   String bottomButtonText = role == null ? "Login" : "Logout";
@@ -179,10 +183,10 @@ Widget _buildDrawer(BuildContext context, NavigationProvider navProvider) {
             ),
           ),
         const SizedBox(height: 10),
-        navItem("Home", Icons.home, 0),
-        navItem("Reports", Icons.description, 1),
-        navItem("Predictions", Icons.auto_awesome, 2),
-        navItem("Profile", Icons.person, 3),
+        navItem("Home", Icons.home, '/home'),
+navItem("Reports", Icons.description, '/viewreports'),
+navItem("Predictions", Icons.auto_awesome, '/predictions'),
+navItem("Profile", Icons.person, '/profile'),
         DrawerNavItem(title: "About Us", icon: Icons.info, route: "/about"),
 if (role?.name == "admin")
   const DrawerNavItem(

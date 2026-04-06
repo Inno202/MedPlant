@@ -68,7 +68,7 @@ class AppRouter {
       path: '/admin/system',
       builder: (context, state) => const Placeholder(),
     ),
-
+  
     GoRoute(
       path: '/profile',
       builder: (context, state) => const ProfileScreen(),
@@ -92,6 +92,7 @@ class AppRouter {
         path: '/approvereports',
         builder: (context, state) => const ApproveReportsScreen(),
       ),
+
       GoRoute(
       path: '/about',
       builder: (context, state) => const AboutScreen(),

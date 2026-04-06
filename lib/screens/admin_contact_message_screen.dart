@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medplant/models/contact_us_model.dart';
+import 'package:medplant/widgets/section_header.dart';
 import '../constants/app_colors.dart';
 
 class AdminContactMessagesScreen extends StatelessWidget {
@@ -79,23 +80,28 @@ class AdminContactMessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Recent Contact Messages'),
-        backgroundColor: AppColors.primaryDark,
-      ),
-      body: messages.isEmpty
-          ? const Center(
-              child: Text('No messages yet.'),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return _detailCard(messages[index]);
-                },
-              ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(title: "Contact Messages"),
+            const SizedBox(height: 16),
+            Expanded(
+              child: messages.isEmpty
+                  ? const Center(
+                      child: Text('No messages yet.'),
+                    )
+                  : ListView.builder(
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        return _detailCard(messages[index]);
+                      },
+                    ),
             ),
+          ],
+        ),
+      ),
     );
   }
 }

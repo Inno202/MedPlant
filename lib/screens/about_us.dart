@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medplant/models/aboutmodel.dart';
 import '../constants/app_colors.dart';
 
@@ -27,11 +28,11 @@ class AboutScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About MedPlants'),
-        backgroundColor: AppColors.primaryDark,
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('About MedPlants'),
+      //   backgroundColor: AppColors.primaryDark,
+      //   centerTitle: true,
+      // ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Column(
@@ -62,10 +63,10 @@ class AboutScreen extends StatelessWidget {
                 children: [
                   // title + subtitle
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Icon(FontAwesomeIcons.seedling,
-                          color: AppColors.primarySoft, size: 28),
+                          color: AppColors.primarySoft, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Column(
@@ -73,7 +74,7 @@ class AboutScreen extends StatelessWidget {
                           children: [
                             Text(
                               about.title,
-                              style: const TextStyle(
+                              style: GoogleFonts.montserrat(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.primaryDark,
@@ -81,9 +82,9 @@ class AboutScreen extends StatelessWidget {
                             ),
                             Text(
                               about.subtitle,
-                              style: const TextStyle(
+                              style: GoogleFonts.dancingScript(
                                 fontSize: 16,
-                                fontStyle: FontStyle.italic,
+                              
                                 color: AppColors.primary,
                               ),
                             ),
@@ -145,11 +146,11 @@ class AboutScreen extends StatelessWidget {
                         size: 14,
                         color: AppColors.white,
                       ),
-                      label: const Text(
+                      label: Text(
                         'Discover ITIKI',
-                        style: TextStyle(
+                        style: GoogleFonts.lato(
                           color: AppColors.white,
-                          fontWeight: FontWeight.w600,
+                        
                         ),
                       ),
                       style: TextButton.styleFrom(

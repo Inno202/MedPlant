@@ -10,7 +10,7 @@ class AdminDashboardScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF7FAF8),
 
-      // ❌ No AppBar (because you're inside AppShell)
+
 
       body: Center(
         child: Container(

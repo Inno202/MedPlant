@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -35,8 +36,8 @@ class PrimaryButton extends StatelessWidget {
             ],
             Text(
               text,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
+              style:  GoogleFonts.lato(
+                // fontWeight: FontWeight.w700,
                 fontSize: 16,
                 color: Colors.white,
               ),
